@@ -1,0 +1,27 @@
+body {
+    font-family: sans-serif;
+}
+
+#form {
+    margin: 1em;
+}
+
+input#interval {
+    width: 80px;
+}
+
+.cell {
+    float: left;
+    width: 16px;
+    height: 16px;
+    border: 1px solid white;
+    background-color: #eee;
+}
+
+.cell.alive {
+    background-color: #222;
+}
+
+.break {
+    clear: both;
+}

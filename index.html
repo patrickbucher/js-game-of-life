@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title="Game of Life">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="gol.js"></script>
+    </head>
+    <body>
+        <h1>Conway's Game of Life</h1>
+        <div id="form">
+            Interval: <input type="number" id="interval" min="100" max="10000" value="300"> ms.
+            <button id="start-stop">Start</button>
+            <button id="clear">Clear</button>
+        </div>
+        <div id="world" data-rows="32" data-cols="48"></div>
+    </body>
+</html>
