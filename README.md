@@ -31,7 +31,7 @@ Gehen Sie zur Funktion `countLivingNeighbours`. Diese ist noch nicht implementie
 2. `row`: Der 0-basierte Zeilenindex der Zelle.
 3. `col`: Der 0-basierte Spaltenindex der Zelle.
 
-Finden Sie heraus, wie viele lebendige Nachbarn die Zelle `field[row][col]` hat. Als Nachbar gelten nicht nur Zellen links (Ost), rechts (West), oben (Nord) oder unten (Süd) der Ausgangszelle, sondern auch diagonal benachbarte Zellen (Nordwest, Nordost, Südost, Südwest).
+Finden Sie heraus, wie viele lebendige Nachbarn die Zelle `field[row][col]` hat. Als Nachbar gelten nicht nur Zellen links (West), rechts (Ost), oben (Nord) oder unten (Süd) der Ausgangszelle, sondern auch diagonal benachbarte Zellen (Nordwest, Nordost, Südost, Südwest).
 
 Testen Sie die berechneten Werte mithilfe von Konsolenausgaben (`console.log`). Sie können hierzu auch das Feld verkleinern, damit die Ausgabe übersichtlich bleibt.
 
