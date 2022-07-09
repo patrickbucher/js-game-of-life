@@ -10,8 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const clearButton = document.getElementById("clear");
 
     drawEmptyWorld(world, rows, cols);
-    let field = addGlider(initField(rows, cols));
-    // TODO: add another object to the field (see below)
+    let field = addFPentomino(addGlider(initField(rows, cols)));
     updateWorld(field);
 
     let interval = undefined;
@@ -24,12 +23,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const stopAnimation = () => {
         clearInterval(interval);
         interval = undefined;
-        startStopButton.textContent = "Start";
     };
 
     startStopButton.addEventListener("click", () => {
         if (interval) {
             stopAnimation();
+            startStopButton.textContent = "Start";
         } else {
             interval = setInterval(animate, intervalControl.value);
             startStopButton.textContent = "Stop";
@@ -38,7 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     clearButton.addEventListener("click", () => {
         field = initField(rows, cols);
-        updateWorld(world, field);
+        console.log(field);
+        updateWorld(field);
         stopAnimation();
     });
 
@@ -58,10 +58,10 @@ function drawEmptyWorld(world, rows, cols) {
         for (let c = 0; c < cols; c++) {
             const cell = document.createElement("div");
             cell.setAttribute("id", `cell-${r}-${c}`);
-            if (c > 0) {
-                cell.setAttribute("class", "cell");
-            } else {
+            if (c == 0) {
                 cell.setAttribute("class", "cell break");
+            } else {
+                cell.setAttribute("class", "cell");
             }
             world.appendChild(cell);
         }
@@ -98,7 +98,23 @@ function addGlider(field) {
     return glider;
 }
 
-// TODO: add another object at some other index for variety
+function addFPentomino(field) {
+    const fPentomino = [
+        [false, true, true],
+        [true, true, false],
+        [false, true, false],
+    ];
+    const nRows = field.length;
+    const nCols = field[0].length;
+    const rowOffset = nRows / 2;
+    const colOffset = nCols / 2;
+    for (let r = 0; r < fPentomino.length; r++) {
+        for (let c = 0; c < fPentomino[r].length; c++) {
+            field[rowOffset + r][colOffset + c] = fPentomino[r][c];
+        }
+    }
+    return field;
+}
 
 function updateWorld(field) {
     for (let r = 0; r < field.length; r++) {
@@ -115,8 +131,30 @@ function updateWorld(field) {
 }
 
 function countLivingNeighbours(field, row, col) {
+    const nRows = field.length;
+    const nCols = field[0].length;
+    const neighbourShifts = [
+        [-1, -1], // north-west
+        [-1, 0], // north
+        [-1, +1], // north-east
+        [0, +1], // east
+        [+1, +1], // south-east
+        [+1, 0], // south
+        [+1, -1], // south-west
+        [0, -1] // west
+    ];
     let livingNeighbours = 0;
-    // TODO: compute livingNeighbours of cell at index (row,col)
+    const shiftWithClipping = (current, shift, max) => {
+        const next = (current + shift) % max;
+        return next < 0 ? max + next : next;
+    };
+    neighbourShifts.forEach(([rowShift, colShift]) => {
+        const r = shiftWithClipping(row, rowShift, nRows);
+        const c = shiftWithClipping(col, colShift, nCols);
+        if (field[r][c]) {
+            livingNeighbours++;
+        }
+    });
     return livingNeighbours;
 }
 
@@ -125,13 +163,23 @@ function computeNextGeneration(oldField) {
     for (let r = 0; r < oldField.length; r++) {
         const newRow = [];
         for (let c = 0; c < oldField[r].length; c++) {
-            // TODO: use countLivingNeighbours to compute neighboursAlive
             const cell = oldField[r][c];
-            const neighboursAlive = -1;
-
-            // TODO: apply the rules to set nextStateAlive properly
-            const nextStateAlive = false;
-            newRow.push(nextStateAlive);
+            const neighboursAlive = countLivingNeighbours(oldField, r, c);
+            let alive = cell;
+            if (cell) {
+                if (neighboursAlive >= 2 && neighboursAlive <= 3) {
+                    alive = true;
+                } else if (neighboursAlive < 2) {
+                    alive = false;
+                } else if (neighboursAlive > 3) {
+                    alive = false;
+                }
+            } else {
+                if (neighboursAlive == 3) {
+                    alive = true;
+                }
+            }
+            newRow.push(alive);
         }
         newField.push(newRow);
     }

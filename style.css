@@ -12,8 +12,8 @@ input#interval {
 
 .cell {
     float: left;
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
     border: 1px solid white;
     background-color: #eee;
 }
